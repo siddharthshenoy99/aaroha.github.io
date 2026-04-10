@@ -680,8 +680,9 @@ a:hover {
   background: linear-gradient(
     135deg,
     var(--avatar-color, var(--color-teal)) 0%,
-    color-mix(in srgb, var(--avatar-color, var(--color-teal)) 70%, #fff 30%) 100%
-  );
+    rgba(255, 255, 255, 0.15) 100%
+  ),
+  var(--avatar-color, var(--color-teal));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -907,9 +908,10 @@ a:hover {
   overflow: hidden;
   background: linear-gradient(
     135deg,
-    var(--work-accent, var(--color-teal-mid)),
-    color-mix(in srgb, var(--work-accent, var(--color-teal-mid)) 60%, #000 40%)
-  );
+    var(--work-accent, var(--color-teal-mid)) 0%,
+    rgba(0, 0, 0, 0.35) 100%
+  ),
+  var(--work-accent, var(--color-teal-mid));
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
