@@ -74,23 +74,58 @@
     });
   }
 
-  /* ── Contact form ── */
+  /* ── Contact form (Formspree) ── */
+  var FORMSPREE_ID = "mvzvekwg";
+
   var form = document.querySelector(".contact-form");
   if (form) {
+    var btn        = form.querySelector(".form-submit");
+    var formNote   = form.querySelector(".form-note");
+    var originalNote = formNote ? formNote.textContent : "";
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var btn = form.querySelector(".form-submit");
-      btn.textContent = "Sent!";
-      btn.disabled = true;
-      btn.style.background = "var(--color-teal-mid)";
 
-      // Reset after 4s so user can resubmit if needed
-      setTimeout(function () {
-        btn.textContent = "Send enquiry";
-        btn.disabled = false;
-        btn.style.background = "";
-        form.reset();
-      }, 4000);
+      if (FORMSPREE_ID === "YOUR_FORM_ID") {
+        // Formspree not configured yet — show a warning in dev
+        console.warn("Formspree ID not set. Replace YOUR_FORM_ID in main.js.");
+        return;
+      }
+
+      var data = new FormData(form);
+
+      btn.textContent = "Sending…";
+      btn.disabled = true;
+
+      fetch("https://formspree.io/f/" + FORMSPREE_ID, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" }
+      })
+        .then(function (res) {
+          if (res.ok) {
+            btn.textContent = "Message sent!";
+            btn.style.background = "var(--color-teal-mid)";
+            form.reset();
+            if (formNote) {
+              formNote.textContent = "We'll be in touch within one business day.";
+              formNote.style.color = "var(--color-teal-mid)";
+              formNote.style.fontWeight = "600";
+            }
+          } else {
+            return res.json().then(function (data) {
+              throw new Error(data.error || "Something went wrong.");
+            });
+          }
+        })
+        .catch(function (err) {
+          btn.textContent = "Send enquiry";
+          btn.disabled = false;
+          if (formNote) {
+            formNote.textContent = "Sorry, something went wrong. Please email us directly at hello@aaroha.com";
+            formNote.style.color = "#b03a2e";
+          }
+        });
     });
   }
 
