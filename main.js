@@ -74,6 +74,26 @@
     });
   }
 
+  /* ── Contact form ── */
+  var form = document.querySelector(".contact-form");
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var btn = form.querySelector(".form-submit");
+      btn.textContent = "Sent!";
+      btn.disabled = true;
+      btn.style.background = "var(--color-teal-mid)";
+
+      // Reset after 4s so user can resubmit if needed
+      setTimeout(function () {
+        btn.textContent = "Send enquiry";
+        btn.disabled = false;
+        btn.style.background = "";
+        form.reset();
+      }, 4000);
+    });
+  }
+
   /* ── Animated counters ── */
   var statNumbers = document.querySelectorAll(".stat-number[data-target]");
 
